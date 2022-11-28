@@ -40,6 +40,11 @@ if __name__ == "__main__":
     y_glob = []
     z_glob = []
     mag_glob = []
+    
+    v_x = [0]
+    v_y = [0]
+    v_z = [0]
+    speed = []
 
     roll = [] # r1 left pos
     pitch = [] # r2 face down pos
@@ -92,6 +97,25 @@ if __name__ == "__main__":
 
 
         packets.append(packet)
+        
+        
+    x_offset = np.average(x_glob[0:1000])
+    y_offset = np.average(y_glob[0:1000])
+    z_offset = np.average(z_glob[0:1000])
+
+    print(x_offset)
+    print(y_offset)
+    print(z_offset)
+
+
+    for d in data:
+        v_x.append(v_x[i] + (x_g - x_offset) * 9.81 * 0.01)
+        v_y.append(v_y[i] + (y_g - y_offset) * 9.81 * 0.01)
+        v_z.append(v_z[i] + (z_g - z_offset) * 9.81 * 0.01)
+
+        i = i+1
+        speed.append(math.sqrt(v_x[i] ** 2 + v_y[i] ** 2 + v_z[i] ** 2))
+ 
     '''
     plt.plot(t, a1.get('x')) # blue
     plt.plot(t, a1.get('y')) # orange
