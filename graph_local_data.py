@@ -123,6 +123,13 @@ if __name__ == "__main__":
     plt.ylabel("rot accel")
     plt.show()
 
+    plt.plot(t, x_glob)
+    plt.plot(t, y_glob)
+    plt.plot(t, z_glob)
+    plt.xlabel("Time")
+    plt.ylabel("Global Acc")
+    plt.show()
+
     
     
 
