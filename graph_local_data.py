@@ -39,46 +39,47 @@ if __name__ == "__main__":
         a1["x"].append(packet["x1"])
         a1["y"].append(packet["y1"])
         a1["z"].append(packet["z1"]) 
-    
-        a1["mag"].append() 
+        mag1 = math.sqrt((packet["x1"]**2) + (packet["y1"]**2) + (packet["z1"]**2))
+        a1["mag"].append(mag1) 
 
         a2["x"].append(packet["x2"])
         a2["y"].append(packet["y2"])
         a2["z"].append(packet["z2"]) 
+        mag2 = math.sqrt((packet["x1"]**2) + (packet["y1"]**2) + (packet["z1"]**2))
+        a2["mag"].append(mag2) 
 
         a3["x"].append(packet["x2"])
         a3["y"].append(packet["y2"])
         a3["z"].append(packet["z2"]) 
+        mag3 = math.sqrt((packet["x1"]**2) + (packet["y1"]**2) + (packet["z1"]**2))
+        a3["mag"].append(mag3) 
 
         t.append(packet["time"])
         packets.append(packet)
     
-    plt.plot(t, a1.get('x')) # blue
-    plt.plot(t, a1.get('y')) # orange
-    plt.plot(t, a1.get('z')) # green
+    accels = [a1, a2, a3]
+    for i in range(len(accels)):
+        plt.plot(t, accels[i].get("x"))
+        plt.plot(t, accels[i].get("y"))
+        plt.plot(t, accels[i].get("z"))
 
-    plt.xlabel('time')
-    plt.ylabel('accel')
-    plt.title('a1')
+        plt.xlabel("time")
+        plt.ylabel("accel")
+        plt.title("a"+str(i+1))
+        plt.show()
+
+    plt.plot(t, a1.get("mag"))
+    plt.plot(t, a2.get("mag"))
+    plt.plot(t, a3.get("mag"))
+    ax = plt.gca()
+
+    ax.set_ylim([0, 100])
+
+    plt.xlabel("time")
+    plt.ylabel("magnitudes")
+    plt.title("Mags")
     plt.show()
-
-    plt.plot(t, a2.get('x')) # blue
-    plt.plot(t, a2.get('y')) # orange
-    plt.plot(t, a2.get('z')) # green
-
-    plt.xlabel('time')
-    plt.ylabel('accel')
-    plt.title('a2')
-    plt.show()
-
-    plt.plot(t, a3.get('x')) # blue
-    plt.plot(t, a3.get('y')) # orange
-    plt.plot(t, a3.get('z')) # green
-
-    plt.xlabel('time')
-    plt.ylabel('accel')
-    plt.title('a3')
-    plt.show()
+    
 
 
 
