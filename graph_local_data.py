@@ -4,7 +4,6 @@ import math
 
 def packetize(row):
     split = row.split(',')
-    
     ret = {}
 
     ret["time"] = int(split[0])
@@ -31,6 +30,26 @@ if __name__ == "__main__":
     a1 = {"x": [], "y": [], "z": [], "mag": []}
     a2 = {"x": [], "y": [], "z": [], "mag": []}
     a3 = {"x": [], "y": [], "z": [], "mag": []}
+
+
+    # z1 - z2 - x3 = x glob
+    # y1 - y2 + y3 = y glob
+    # -x1 - x2 + z3 = z glob
+
+    x_glob = []
+    y_glob = []
+    z_glob = []
+
+    roll = [] # r1 left pos
+    pitch = [] # r2 face down pos
+    yaw = [] # r3 right rot pos
+
+    hockey_rad = 8
+    football_rad = 10
+
+    # r1 = ((x3 + x1 - x2) / 10cm) * 9.81 = r1 radians/s2
+    # r2 = ((y1 - y2 - y3) / 10cm) * 9.81 = r2 radians/s2
+    # r3 = ((y1 + y2) / 10cm) * 9.81 = r3 radians/s2
     
     t = []
 
@@ -55,18 +74,35 @@ if __name__ == "__main__":
         a3["mag"].append(mag3) 
 
         t.append(packet["time"])
+
+        x_g = packet["z1"] - packet["z2"] - packet["x3"]
+        y_g = packet["y1"] - packet["y2"] + packet["y3"]
+        z_g = (-1 * packet["x1"]) - packet["x2"] + packet["z3"]
+
+        x_glob.append(x_g)
+        y_glob.append(y_g)
+        z_glob.append(z_g)
+
+        roll_i = ((packet["x3"] + packet["x1"] - packet["x2"]) / 10) * 9.81
+        pitch_i = ((packet["y1"] - packet["y2"] - packet["y3"]) / 10) * 9.81
+        yaw_i = ((packet["y1"] + packet["y2"]) / 10) * 9.81
+
+        roll.append(roll_i)
+        pitch.append(pitch_i)
+        yaw.append(yaw_i)
+
         packets.append(packet)
     
     accels = [a1, a2, a3]
-    for i in range(len(accels)):
-        plt.plot(t, accels[i].get("x"))
-        plt.plot(t, accels[i].get("y"))
-        plt.plot(t, accels[i].get("z"))
+    # for i in range(len(accels)):
+    #     plt.plot(t, accels[i].get("x"))
+    #     plt.plot(t, accels[i].get("y"))
+    #     plt.plot(t, accels[i].get("z"))
 
-        plt.xlabel("time")
-        plt.ylabel("accel")
-        plt.title("a"+str(i+1))
-        plt.show()
+    #     plt.xlabel("time")
+    #     plt.ylabel("accel")
+    #     plt.title("a"+str(i+1))
+    #     plt.show()
 
     plt.plot(t, a1.get("mag"))
     plt.plot(t, a2.get("mag"))
@@ -79,6 +115,15 @@ if __name__ == "__main__":
     plt.ylabel("magnitudes")
     plt.title("Mags")
     plt.show()
+
+    plt.plot(t, roll)
+    plt.plot(t, pitch)
+    plt.plot(t, yaw)
+    plt.xlabel("time")
+    plt.ylabel("rot accel")
+    plt.show()
+
+    
     
 
 
